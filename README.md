@@ -1,2 +1,2 @@
 # LearnOpenGL
-Going through https://learnopengl.com/ tutorial :)
+Going through https://learnopengl.com/ tutorials :)
