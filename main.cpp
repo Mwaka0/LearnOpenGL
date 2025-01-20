@@ -34,12 +34,6 @@ int main() {
 #ifdef __APPLE__
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif
-
-	GLfloat vertices[] = {
-	-0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
-	 0.5f, -0.5f * float(sqrt(3)) / 3, 0.0f,
-	 0.0f,  0.5f * float(sqrt(3)) * 2 / 3, 0.0f
-	};
 	
 	// Create a window
 	GLFWwindow* window = glfwCreateWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "LearnOpenGL", NULL, NULL);
@@ -106,13 +100,30 @@ int main() {
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
 
-	// Create a vertex buffer object (VBO) and vertex array object (VAO)
-	GLuint VAO, VBO;
+	GLfloat vertices[] = {
+		// First Triangle
+		 -0.5f,  -0.5f, 0.0f,  // 0
+		 0.5f, -0.5f, 0.0f,  // 1
+		0.0f,  0.5f, 0.0f,  // 2		
+		// Second triangle
+		 -0.5f / 2, 0.0f, 0.0f,  // 3
+		0.0f, -0.5f, 0.0f,  // 4
+		0.5f /2,  0.0f, 0.0f   // 5
+	};
 
-	// Generate a vertex array object
+	GLuint indices[] = {
+		0,4,3, // first triangle
+		4,1,5, // second triangle
+		3,5,2 // third triangle
+	};
+
+	// Create a vertex buffer object (VBO) and vertex array object (VAO)
+	GLuint VAO, VBO, EBO;
+
+	// Generate the VAO, VBO, and EBO with OpenGL and one object each
 	glGenVertexArrays(1, &VAO); 
-	// Generate a buffer object
 	glGenBuffers(1, &VBO);
+	glGenBuffers(1, &EBO); 
 
 	// Bind the vertex array object to the GL_VERTEX_ARRAY target
 	glBindVertexArray(VAO); 
@@ -121,13 +132,18 @@ int main() {
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	// Copy the vertex data into the buffer's memory
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+	// Bind the buffer object to the GL_ELEMENT_ARRAY_BUFFER target
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
 	// Set the vertex attributes pointers
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0); 
 	glEnableVertexAttribArray(0);
+	
 
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0); 
 
 
 	// Main render loop
@@ -141,7 +157,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		glUseProgram(shaderProgram);
 		glBindVertexArray(VAO);
-		glDrawArrays(GL_TRIANGLES, 0, 3); 
+		glDrawElements(GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0);
 
 		// Swap the buffers
 	    glfwSwapBuffers(window);
@@ -151,6 +167,7 @@ int main() {
 	// De-allocate resources
 	glDeleteVertexArrays(1, &VAO);
 	glDeleteBuffers(1, &VBO);
+	glDeleteBuffers(1, &EBO);
 	glDeleteProgram(shaderProgram);
 
 	// Terminate GLFW
