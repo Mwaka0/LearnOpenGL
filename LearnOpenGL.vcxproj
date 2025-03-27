@@ -149,6 +149,16 @@
   <ItemGroup>
     <ClCompile Include="..\..\..\Downloads\glad.c" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="shaderClass.cpp" />
+    <ClCompile Include="VBO.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="default.frag" />
+    <None Include="default.vert" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="shaderClass.h" />
+    <ClInclude Include="VBO.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

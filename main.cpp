@@ -13,6 +13,8 @@ const char* vertexShaderSource = "#version 330 core\n"
 "{\n"
 "   gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0);\n"
 "}\0";
+
+
 const char* fragmentShaderSource = "#version 330 core\n"
 "out vec4 FragColor;\n"
 "void main()\n"
@@ -50,55 +52,6 @@ int main() {
 	    std::cout << "Failed to initialize GLAD" << std::endl;
 	    return -1;
 	} 
-
-	// Create a vertex buffer object
-	GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	// Attach the shader source code to the shader object and compile the shader
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	// Compile the shader
-	glCompileShader(vertexShader);
-	// Check for shader compile errors
-	GLint success;
-	GLchar infoLog[512];
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	// If the compilation failed, print the error message
-	if (!success) {
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	// Create a fragment shader
-	GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-	// Check for shader compile errors
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	// If the compilation failed, print the error message
-	if (!success) {
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-
-	// Create a shader program
-	GLuint shaderProgram = glCreateProgram();
-	
-	// Attach the vertex and fragment shaders to the shader program
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-
-	// Link the shaders
-	glLinkProgram(shaderProgram);
-
-	// Check for linking errors	
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
-	}
-
-	// Delete the shaders as they're linked into our program now and no longer necessary
-	glDeleteShader(vertexShader);
-	glDeleteShader(fragmentShader);
 
 	GLfloat vertices[] = {
 		// First Triangle
